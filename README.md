@@ -5,8 +5,9 @@ Here we can add products and then add to cart using vue.js , axios.js and node.j
 * **Software Setup**
 	* Node v8.11.1
 	* Mysql 5.7.21-log
+	
 * Change the password and username in db.js file according to your mysql
-* import the database 
+* import the database file i.e. database.sql at your server
 
 * Summary of set up
 * Configuration
