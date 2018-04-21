@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bootstap.css">
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>-->
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>-->
+    <script src="vue.js"></script>
+    <script src="axios.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <ul class="navbar-nav">
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html" >Shop</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="index.html" >Show All Products</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/AddProducts.html" >Add Product</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="cart.html"> cart</a>
+        </li>
+
+    </ul>
+</nav>
+<br/>
+
+<br/>
+<div class="container">
+    <h2>Add Product</h2>
+    <form id="demo">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" placeholder="Enter name"  v-model="name">
+        </div>
+        <div class="form-group">
+            <label for="Price">Price:</label>
+            <input type="number" class="form-control" placeholder="Enter Price of the product"  v-model="price">
+        </div>
+        <div class="form-group">
+            <label for="vendor">Type</label>
+            <select class="form-control" id="sel1" v-model="vendor"  >
+                <!--<option value="">Select Any value</option>-->
+                <option v-for="v in vendors"
+                        :value="v.id">{{ v.name }} </option>
+               <!-- <option value="v.id">{{v.name}}</option>-->
+                <!--<option value="2">MI</option>-->
+            </select>
+        </div>
+
+        <button class="btn btn-default" v-on:click= "addProducts">Add Product</button>
+    </form>
+
+</div>
+
+</body>
+</html>
+
+<script>
+    let app =new Vue({
+        el: '#demo',
+        data: {
+            name  : '',
+            price  : '',
+            vendor   : '',
+            vendors: []
+        },
+        methods : {
+            addProducts(){
+                var obj = {name :this.name ,price: this.price, vendorId:this.vendor};
+                console.log(obj)
+                new Promise((resolve)=>{
+                    axios.post('/api/products',obj).then(function (data) {
+                    resolve(data.data)
+                    // console.log(data.data)
+                })})
+                .then((data)=>{
+                    // this.todos=data
+                    // console.log("add products")
+                })
+                window.alert("Product has been added")
+            },
+            findAllVendors(){
+                new Promise((resolve)=>{
+                    axios.get('/api/vendor').then(function (data) {
+                        resolve(data.data)
+                    // console.log(data.data)
+                })
+                }).then((data)=>{
+                    this.vendors = data
+                })
+            }
+        }
+    })
+    app.findAllVendors()
+</script>
+</body>
+</html>

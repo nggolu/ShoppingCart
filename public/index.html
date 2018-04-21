@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bootstap.css">
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>-->
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>-->
+    <script src="vue.js"></script>
+    <script src="axios.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <ul class="navbar-nav">
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html" >Shop</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="index.html" >Show All Products</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/AddProducts.html" >Add Product</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="cart.html"> cart</a>
+        </li>
+
+    </ul>
+</nav>
+<br/>
+
+<div class="container"  id="app">
+
+    <select class="form-control" id="sel1"   v-on:change="applyfilters($event.target.value)">
+        <option value="">Select Any value</option>
+
+
+        <option v-for="v in vendors" :value="v.id">{{ v.name }} </option>
+        <!-- <option value="v.id">{{v.name}}</option>-->
+        <!--<option value="2">MI</option>-->
+    </select>
+<br/>
+    <div class="row col-12"  id = "product-list">
+        <div class="col-4 card mx-2 p-2"  v-for="product in products" style="margin-bottom: 20px">
+            <b>Product Name :</b>{{product.name}}
+            <div class="row">
+                <div class="col-4 m-3 p-3">
+                    <b>Price :</b>  {{product.price}}
+                </div>
+                <div class="col-4 m-3 p-3">
+                    <b>Vendor :</b>  {{product.vendor.name}}
+                </div>
+                <div class="col-6 m-2 p-3">
+                    <button class = "col btn btn-primary" v-on:click="addToCart(product.id)" >Buy</button>
+                </div>
+            </div>
+
+        </div>
+        <br/>
+
+    </div>
+</div>
+<script >
+
+    let app = new Vue({
+        el: "#app",
+        data:{
+            newTask: '',
+            id : 0,
+            url : '/todos' ,
+            status: false,
+            products:[],
+            vendors : []
+        },
+        methods:{
+            getAllProducts(){
+                new Promise((resolve)=>{
+                    axios.get('/api/products').then(function (response) {
+                    resolve(response.data)
+                })
+                }).then((data)=>{
+                        this.products=data
+                       // console.log(this.products)
+                })
+            },
+            addToCart(id){
+                console.log(id)
+                var obj = {productId : id};
+                console.log(obj)
+                new Promise((resolve)=>{
+                    axios.post('/api/cart/',obj).then(function (reponse){
+
+                })
+                }).then(()=>console.log("successfully add to cart"))
+                window.alert("product has been added to your cart")
+            },
+            findAllVendors(){
+                new Promise((resolve)=>{
+                    axios.get('/api/vendor').then(function (data) {
+                    resolve(data.data)
+                   // console.log(data.data)
+                })
+            }).then((data)=>{
+                    this.vendors = data
+            })
+            },
+            applyfilters(id){
+                new Promise((resolve)=>{
+                    axios.get('/api/products/'+id).then(function (response) {
+                    resolve(response.data)
+                })
+                }).then((data)=>{
+                        this.products=data
+                    // console.log(this.products)
+                })
+            }
+        }
+    })
+    app.getAllProducts();
+    app.findAllVendors();
+</script>
+</body>
+</html>

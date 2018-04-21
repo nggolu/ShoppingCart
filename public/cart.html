@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bootstap.css">
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>-->
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>-->
+    <script src="vue.js"></script>
+    <script src="axios.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <ul class="navbar-nav">
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html" >Shop</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="index.html" >Show All Products</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/AddProducts.html" >Add Product</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="cart.html"> cart</a>
+        </li>
+
+    </ul>
+</nav>
+<br/>
+<div class="container" id="app">
+    <h2>Your cart</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>quantity</th>
+                <th>Rate</th>
+                <th>vendor</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="cartItem in cartItems">
+                <td>{{cartItem.product.name}}</td>
+                <td>
+                    <button type="button" class="btn btn-primary" v-on:click="changequantity(cartItem.productId,-1)">-</button>
+                    {{cartItem.quantity}}
+                    <button type="button" class="btn btn-primary" v-on:click="changequantity(cartItem.productId,+1)">+</button>
+                </td>
+                <td>{{cartItem.product.price}}</td>
+                <td>{{cartItem.product.vendor.name}}</td>
+                <td>{{cartItem.quantity*cartItem.product.price}}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><b>Total</b></td>
+                <td>{{this.totalPrice}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script >
+
+    let app = new Vue({
+        el: "#app",
+        data:{
+            totalPrice : 0,
+            cartItems:[]
+        },
+        methods:{
+            fetAllcartItems(){
+                new Promise((resolve)=>{
+                    axios.get('/api/cart').then(function (response) {
+                    resolve(response.data)
+                })
+                }).then((data)=>{
+                        this.cartItems=data
+                        // console.log(data)
+                        for(d of data){
+
+                            this.totalPrice = this.totalPrice+ (d.quantity )* (d.product.price);
+                        }
+                    // console.log(this.products)
+                })
+            },
+            changequantity(id,quantity){
+                var obj = {id : id , quantity: quantity}
+
+                // let iddd = parseInt(id)
+                console.log(this.cartItems)
+                let index =this.cartItems.findIndex(item => item.productId == id)
+
+                this.totalPrice = this.totalPrice + this.cartItems[index].product.price * quantity
+                if(this.cartItems[index].quantity ===1 && quantity===-1){
+                    this.cartItems.splice(index ,1);
+                }
+                new Promise((resolve)=>{
+                    axios.post('/api/cart/add',obj).then(function (response) {
+                    resolve(response.data)
+                })
+                }).then((data)=>{
+                    console.log(data)
+
+                    if(data.quantity>0)
+                    this.cartItems[index].quantity = data.quantity
+                    /*for(d of data){
+
+                        this.totalPrice = this.totalPrice+ (d.quantity )* (d.product.price);
+                    }*/
+                })
+                // location.reload();
+            }
+        }
+    })
+    app.fetAllcartItems();
+</script>
+</body>
+</html>
