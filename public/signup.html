@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bootstap.css">
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>-->
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>-->
+    <script src="vue.js"></script>
+    <script src="axios.js"></script>
+</head>
+<body>
+<!--<form action=" /signin" method="post">-->
+<!--<input name="username" type="text">-->
+<!--<input name="password" type="password">-->
+<!--<input type="submit">-->
+<!--</form>-->
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <ul class="navbar-nav">
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html" >Shop</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="signin.html" >Login</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="signup.html" >SignUp</a>
+        </li>
+
+
+    </ul>
+</nav>
+<br/>
+
+<br/>
+<div class="container">
+    <h2>Register User</h2>
+    <form id="demo" method="post" action="/signup">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" placeholder="Enter name" name="username" type="text">
+        </div>
+        <div class="form-group">
+            <label for="Price">Price:</label>
+            <input name="password" type="password" class="form-control" placeholder="Passwod" >
+        </div>
+
+        <button type="submit" class="btn btn-default">Login</button>
+    </form>
+
+</div>
+
+</body>
+</html>

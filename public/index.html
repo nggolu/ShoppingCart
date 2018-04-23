@@ -86,15 +86,28 @@
                 })
             },
             addToCart(id){
-                console.log(id)
+                // console.log(id)
                 var obj = {productId : id};
-                console.log(obj)
+                // console.log(obj)
                 new Promise((resolve)=>{
-                    axios.post('/api/cart/',obj).then(function (reponse){
+                    axios.post('/api/cart/',obj).then(function (response){
+                    resolve(response.data)
+                })
+                }).then((data)=>{
+                    // console.log(data)
+                    // console.log(data.id)
+                    if(!data.id){
+
+                        // console.log("fist login")
+                        window.alert("Fist login ")
+                        window.location="signin.html";
+                    }
+                    else{
+                        // console.log("successfully add to cart")
+                        window.alert("product has been added to your cart")
+                    }
 
                 })
-                }).then(()=>console.log("successfully add to cart"))
-                window.alert("product has been added to your cart")
             },
             findAllVendors(){
                 new Promise((resolve)=>{

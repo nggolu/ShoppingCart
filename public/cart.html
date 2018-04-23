@@ -79,12 +79,14 @@
                     resolve(response.data)
                 })
                 }).then((data)=>{
-                        this.cartItems=data
-                        // console.log(data)
-                        for(d of data){
+                        console.log(data)
 
-                            this.totalPrice = this.totalPrice+ (d.quantity )* (d.product.price);
-                        }
+                            this.cartItems=data
+                            // console.log(data)
+                            for(d of data){
+
+                                this.totalPrice = this.totalPrice+ (d.quantity )* (d.product.price);
+                            }
                     // console.log(this.products)
                 })
             },

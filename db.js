@@ -49,8 +49,20 @@ const Cart = db.define('cart', {
     }
 
 })
+const User = db.define('user', {
+    username: {
+        type: Sequelize.STRING(30),
+        unique: true,
+        allowNull: false
+    },
+    password: {
+        type: Sequelize.STRING,
+        allowNull: false
+    }
+})
 
 Cart.belongsTo(Product);
+Cart.belongsTo(User);
 Product.belongsTo(Vendor);
 // Vendor.hasMany(Product, {as : 'vendorId'})
 // Vendor.belongsTo(Product, {foreignKey: 'Vendor.id', as: 'vendor_id'});
@@ -58,6 +70,6 @@ db.sync()
     .then(()=>console.log("database has been connected"))
     .catch((err)=>console.log("error connectiong with db"))
 exports = module.exports = {
-    Product ,Vendor , Cart
+    Product ,Vendor , Cart, User
 }
 

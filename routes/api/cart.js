@@ -5,27 +5,43 @@ const Vendor  = require('../../db').Vendor
 
 route.get('/' ,(req,res)=>{
     //
-    Cart.findAll({
-            include :[
-                    {
-                        model : Product,
-                        include:[Vendor]
-                    }
-                ]
-        })
-        .then((carts)=>{
-        res.status(200).send(carts)
-        })
-        .catch((err)=>{
-            console.log(err)
+    // console.log(req.user)
+
+    if(req.user) {
+
+        // console.log(req.user)
+        // console.log(req)
+        Cart.findAll({
+            include: [
+                {
+                    model: Product,
+                    include: [Vendor]
+                }
+            ],
+            where : {userId : req.user.id}
+
+        }).then((carts) => {
+            res.status(200).send(carts)
+        }).catch((err) => {
+                console.log(err)
             res.status(500).send({
-                error : "could not retrieve products "
+                error: "could not retrieve products "
             })
         })
+    }
+    else{
+        console.log("not define")
+        // res.redirect('./signup')
+        res.send({status : true})
+    }
 })
 
 route.post('/', (req,res)=>{
-        console.log(req.body.productId)
+        // console.log(req.body.productId)
+
+    if(req.user)
+    {
+        var id= req.user.id;
         Cart.findOne({
             where : {productId : req.body.productId}
         }).then((cart)=>{
@@ -39,7 +55,9 @@ route.post('/', (req,res)=>{
             else{
                     Cart.create({
                     productId : req.body.productId,
-                    quantity : 1
+                    quantity : 1,
+                    userId: id
+
                 })
                 res.status(200).send("new cart is created")
             }
@@ -50,6 +68,14 @@ route.post('/', (req,res)=>{
                 error : "could not retrieve products "
             })
         })
+    }else{
+            console.log(" not login")
+        res.send({
+            status:false
+        })
+    }
+
+
 })
 route.post('/add', (req,res,next)=>{
         console.log(req.body.id)

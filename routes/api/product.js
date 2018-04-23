@@ -4,7 +4,9 @@ const Vendors = require('../../db').Vendor
 const  route = require('express').Router()
 
 route.get('/' ,(req,res)=>{
-    Product.findAll({
+    // console.log(req.user)
+
+        Product.findAll({
             include: [
                     { model: Vendors/*, as 'id', where : {id : 'Product.vendor_id'}*/}
                 ]
@@ -18,9 +20,10 @@ route.get('/' ,(req,res)=>{
                     error : "could not retrieve products "
                 })
             })
+
 })
 route.get('/:id' ,(req,res)=>{
-    console.log(req.params.id)
+    // console.log(req.params.id)
     Product.findAll({
         include: [
             { model: Vendors/*, as 'id', where : {id : 'Product.vendor_id'}*/}
@@ -40,19 +43,23 @@ route.get('/:id' ,(req,res)=>{
 
 route.post('/', (req,res)=>{
 
-        Product.create({
-            name : req.body.name,
-            price : parseFloat(req.body.price),
-            vendorId : parseInt(req.body.vendorId)
-        }).then((product)=>{
 
-            res.status(201).send(product)
-        }).catch((err)=>{
-               // console.log(err)
-                res.status(501).send({
-                error : "could not post  products "
+            Product.create({
+                    name: req.body.name,
+                    price: parseFloat(req.body.price),
+                    vendorId: parseInt(req.body.vendorId),
+
+                }).then((product) => {
+
+                    res.status(201).send(product)
+            }).
+                catch((err) => {
+                    // console.log(err)
+                    res.status(501).send({
+                    error: "could not post  products "
+                })
             })
-        })
+
 })
 
 exports = module.exports= route

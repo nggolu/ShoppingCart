@@ -18,7 +18,7 @@ route.get('/' ,(req,res)=>{
 })
 
 route.post('/', (req,res)=>{
-    console.log(req.body.name)
+    // console.log(req.body.name)
     Vendor.create({
         name: req.body.name
     }).then((vendor)=>{
