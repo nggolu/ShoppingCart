@@ -43,7 +43,8 @@ route.post('/', (req,res)=>{
     {
         var id= req.user.id;
         Cart.findOne({
-            where : {productId : req.body.productId}
+            where : {productId : req.body.productId,
+                    userId : req.user.id}
         }).then((cart)=>{
             if(cart){
                 console.log(" update")
@@ -58,8 +59,11 @@ route.post('/', (req,res)=>{
                     quantity : 1,
                     userId: id
 
-                })
-                res.status(200).send("new cart is created")
+                }).then((data)=>{
+                    console.log(" new cart is created")
+                res.status(200).send(data)
+            })
+
             }
         })
         .catch((err)=>{
